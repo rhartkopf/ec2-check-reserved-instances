@@ -27,6 +27,12 @@ def main(docopt_args):
   aws_access_key_id=key,
   aws_secret_access_key=secret,)
   
+  try:
+    c.get_all_instance_status()
+  except:
+    print "Authentication error. Check your AWS key/secret and access permissions."
+    exit(2)
+  
   # Get running instances
   running_instances = {}
   for r in c.get_all_reservations():
@@ -80,8 +86,14 @@ def main(docopt_args):
       print "\t\t\t(%s)\t%s\t%s\t%s" % ( unreserved_instances[ u ], u[0], u[1], u[2] )
   print
   
-  qty_running_instances = reduce( lambda x, y: x+y, running_instances.values() )
-  qty_reserved_instances = reduce( lambda x, y: x+y, reserved_instances.values() )
+  if running_instances:
+    qty_running_instances = reduce( lambda x, y: x+y, running_instances.values() )
+  else:
+    qty_running_instances = 0
+  if reserved_instances:
+    qty_reserved_instances = reduce( lambda x, y: x+y, reserved_instances.values() )
+  else:
+    qty_reserved_instances = 0
   
   print "(%s) running on-demand instances\n(%s) purchased reservations" % ( qty_running_instances, qty_reserved_instances )
 
