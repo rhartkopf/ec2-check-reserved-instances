@@ -15,41 +15,34 @@ or
 
 $ pip install boto
 
+Usage:
+  check_aws_ris.py <accesskey> <secretkey> [<aws_region>]
 
-
-The only configuration needed is your AWS keys. These can either be modified at the top of the file, ec2-check-reserved-instances.py, or by exporting your keys in an environment variable:
-
-$ export AWSAccessKeyId=1234567
-
-$ export AWSSecretKey=j3jfijfisa83j+io4jfioajioaw
 
 EXAMPLE OUTPUT
 ===============
 ```
-vela:~/dev epheph$ ./ec2-check-reserved-instances.py
-UNUSED RESERVATION!	(1)	m1.small	us-east-1b
-UNUSED RESERVATION!	(1)	m2.2xlarge	us-east-1a
+$ ./ec2-check-reserved-instances.py <accesskey> <secretkey> us-west-1
+Unused reservations:    (#)     Type            AZ              VPC
+                        (2)     c3.large        us-west-1a      0
+                        (2)     c3.xlarge       us-west-1a      0
+                        (1)     m3.medium       us-west-1a      0
+                        (1)     m1.small        us-west-1a      0
 
-Instance not reserved:	(1)	t1.micro	us-east-1c
-Instance not reserved:	(2)	m1.small	us-east-1d
-Instance not reserved:	(3)	m1.medium	us-east-1d
-Instance not reserved:	(1)	m2.2xlarge	us-east-1b
+Instances not reserved: (#)     Type            AZ              VPC
+                        (1)     c3.xlarge       us-west-1a      1
+                        (1)     t2.small        us-west-1a      1
+                        (1)     m3.xlarge       us-west-1a      1
+                        (2)     c3.2xlarge      us-west-1a      1
+                        (2)     c3.large        us-west-1a      1
+                        (1)     m3.medium       us-west-1a      1
+                        (1)     m1.small        us-west-1a      1
 
-(23) running on-demand instances
-(18) reservations
+(9) running on-demand instances
+(6) purchased reservations
 ```
-
-In this example, you can easily see that an m2.2xlarge was spun up in the wrong AZ (us-east-1b vs. us-east-1a), as well as an m1.small. The "Instance not reserved" section shows that you could benefit from reserving:
-* (1) t1.micro
-* (1) m1.small (not 2, since you'll likely want to move your us-east-1b small to us-east-1d)
-* (3) m1.medium
 
 
 TODO
 ===============
-- Add some sort of sorting, by Availability Zone/instance type
-- Add VPC support
-- Currently only supports US-EAST. Make using other regions easy, perhaps just using an environment variable/internal config variable
-- External config? Is there some standard place to store AWS credentials?
-- Add option to use API to purchase the additional reservations (need to be EXTREMELY careful here, any mistake or miscommunication could cost quite a bit of money)
-- Windows? Not taking Windows reserved instances into account
+- Fix VPC support for accounts that do not have EC2 Standard support
