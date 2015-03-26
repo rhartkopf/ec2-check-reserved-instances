@@ -62,24 +62,28 @@ def main(docopt_args):
   
   # pprint ( instance_diff )
   
-  unused_reservations = dict((key,value) for key, value in instance_diff.iteritems() if value > 0)
+  unused_reservations = dict((k,v) for k, v in instance_diff.iteritems() if v > 0)
   if unused_reservations == {}:
-    print "Congratulations, you have no unused reservations"
+    print "Congratulations, you have no unused reservations!"
   else:
+    print "Unused reservations:\t(#)\tType\t\tAZ\t\tVPC"
     for u in unused_reservations:
-      print "UNUSED RESERVATION!\t(%s)\t%s\t%s" % ( unused_reservations[ u ], u[0], u[1] )
+      print "\t\t\t(%s)\t%s\t%s\t%s" % ( unused_reservations[ u ], u[0], u[1], u[2] )
+  print
   
-  unreserved_instances = dict((key,-value) for key, value in instance_diff.iteritems() if value < 0)
+  unreserved_instances = dict((k,-v) for k, v in instance_diff.iteritems() if v < 0)
   if unreserved_instances == {}:
-    print "Congratulations, you have no unreserved instances"
+    print "Congratulations, you have no unreserved instances!"
   else:
+    print "Instances not reserved:\t(#)\tType\t\tAZ\t\tVPC"
     for u in unreserved_instances:
-      print "Instance not reserved:\t(%s)\t%s\t%s" % ( unreserved_instances[ u ], u[0], u[1] )
+      print "\t\t\t(%s)\t%s\t%s\t%s" % ( unreserved_instances[ u ], u[0], u[1], u[2] )
+  print
   
   qty_running_instances = reduce( lambda x, y: x+y, running_instances.values() )
   qty_reserved_instances = reduce( lambda x, y: x+y, reserved_instances.values() )
   
-  print "\n(%s) running on-demand instances\n(%s) purchased reservations" % ( qty_running_instances, qty_reserved_instances )
+  print "(%s) running on-demand instances\n(%s) purchased reservations" % ( qty_running_instances, qty_reserved_instances )
 
 
 # Run the main function
