@@ -7,7 +7,7 @@ Amazon's reserved instances (ec2-describe-reserved-instances, ec2-describe-reser
 
 This quick little Python script uses boto to inspect your reserved instances and running instances to determine if you currently have any reserved instances which are not being used. Additionally, it will give you a list of non-reserved instances which could benefit from additional reserved instance allocations.
 
-To use the program, make sure you have boto installed. If you don't already have it, run:
+To use the program, make sure you have boto and docopt installed. If you don't already have boto, run:
 
 $ easy_install boto
 
@@ -15,14 +15,11 @@ or
 
 $ pip install boto
 
-Usage:
-  check_aws_ris.py <accesskey> <secretkey> [<aws_region>]
-
 
 EXAMPLE OUTPUT
 ===============
 ```
-$ ./ec2-check-reserved-instances.py <accesskey> <secretkey> us-west-1
+$ ./ec2-check-reserved-instances.py <accesskey> <secretkey> <region>
 Unused reservations:    (#)     Type            AZ              VPC
                         (2)     c3.large        us-west-1a      0
                         (2)     c3.xlarge       us-west-1a      0
